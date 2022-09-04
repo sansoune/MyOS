@@ -1,10 +1,20 @@
-org 0x7C00
+org 0x0
 bits 16
 
 %define ENDL 0x0D, 0x0A
 
 start:
-    jmp main
+
+
+    mov si, message_hello_world
+    call puts
+
+.halt:
+    cli
+    hlt
+
+
+
 
 puts:
     push si
@@ -28,26 +38,6 @@ puts:
     pop si
     ret
 
-
-main:
-    mov ax, 0
-    mov ds, ax
-    mov es, ax
-
-    mov ss, ax
-    mov sp, 0x7C00
-
-    mov si, message_hello_world
-    call puts
-
-    hlt
-
-.halt:
-    jmp .halt
-
-
 message_hello_world: db 'hello world!', ENDL, 0
 
 
-times 510-($-$$) db 0
-dw 0AA55h
