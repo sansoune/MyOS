@@ -1,7 +1,6 @@
 #pragma once
+#include "stdint.h"
 
-//void putc(char c);
-//void puts(const char* str);
-void clrscr();
-void putchr(int x, int y, char c);
+void setCursorPosition(uint16_t position);
+uint16_t PositionFromCoords(uint8_t x, uint8_t y);
 void print(const char* str);
