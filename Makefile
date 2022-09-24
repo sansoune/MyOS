@@ -1,5 +1,6 @@
 ASM=nasm
-
+CC=x86_64-elf-gcc
+LD=ld 
 src_dir=src
 build_dir=build
 
@@ -10,13 +11,23 @@ floppy_image: $(build_dir)/main.img
 $(build_dir)/main.img: bootloader kernel
 	dd if=/dev/zero of=$(build_dir)/main.img bs=512 count=2880
 	mkfs.fat -F 12 -n "NBOS" $(build_dir)/main.img
-	dd if=$(build_dir)/bootloader.bin of=$(build_dir)/main.img conv=notrunc
+	dd if=$(build_dir)/stage1.bin of=$(build_dir)/main.img conv=notrunc
+	mcopy -i $(build_dir)/main.img $(build_dir)/stage2.bin "::stage2.bin"
 	mcopy -i $(build_dir)/main.img $(build_dir)/kernel.bin "::kernel.bin"
 
-bootloader: $(build_dir)/bootloader.bin
+bootloader: stage1 satge2
 
-$(build_dir)/bootloader.bin: always
-	$(ASM) $(src_dir)/bootloader/boot.asm -f bin -o $(build_dir)/bootloader.bin
+
+stage1: $(build_dir)/stage1.bin
+
+$(build_dir)/stage1.bin: always
+	$(MAKE) -C $(src_dir)/bootloader/stage1 build_dir=$(abspath $(build_dir))
+
+satge2: $(build_dir)/stage2.bin
+
+$(build_dir)/stage2.bin: always
+	$(MAKE) -C $(src_dir)/bootloader/stage2 build_dir=$(abspath $(build_dir))
+
 
 kernel: $(build_dir)/kernel.bin
 
