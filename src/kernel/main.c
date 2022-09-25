@@ -1,6 +1,6 @@
-
+#include "includes/stdio.h"
 
 void start(void) {
-    *(char*)0xb8000 = 'Q';
+    print("hello from c!");
     return;
 }
