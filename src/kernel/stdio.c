@@ -3,6 +3,7 @@
 #include "includes/colors.h"
 
 #define VGA_MEMORY (uint8_t*)0xB8000
+#define VGA_MEMORY_COLOR (uint8_t*)0xB8001
 #define VGA_WIDTH 80
 
 uint16_t CursorPosition = 0;
@@ -35,6 +36,7 @@ void print(const char* str) {
         default:
         
         *(VGA_MEMORY + index * 2) = *charPtr;
+        // *(VGA_MEMORY_COLOR + index * 2) = BACKGROUND_BLINKINGRED | FOREGROUND_CYAN;   just to test the colors
         index++;
            
         }
