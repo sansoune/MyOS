@@ -1,6 +1,7 @@
 #include "includes/stdio.h"
 
 void start(void) {
-    print("hello from c!");
+    setCursorPosition(PostionFromCoords(8,4));
+    print("hello from c!\n\rtest 123");
     return;
 }
