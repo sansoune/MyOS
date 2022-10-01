@@ -1,5 +1,5 @@
 [org 0x7c00]
-KERNEL_LOCATION equ 0x1000
+KERNEL_LOCATION equ 0x7e00
 
 section .text
 global start
@@ -48,6 +48,10 @@ start_protected_mode:
 
     mov ebp, 0x90000
     mov esp, ebp
+
+    in al, 0x92
+	or al, 0x02
+	out 0x92, al
 
     jmp KERNEL_LOCATION
 

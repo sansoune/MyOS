@@ -2,6 +2,6 @@
 
 void start(void) {
     setCursorPosition(PostionFromCoords(8,4));
-    print("hello from c!\n\rtest 123");
+    print("hello from c!\ntest 1234");
     return;
 }
