@@ -1,5 +1,6 @@
 /build
 /toolchain
 /src_2
+/test
 *.mk
 *.sh

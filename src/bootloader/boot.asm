@@ -1,5 +1,6 @@
 [org 0x7c00]
-KERNEL_LOCATION equ 0x7e00
+[bits 16]
+KERNEL_LOCATION equ 0x1000
 
 section .text
 global start
@@ -10,7 +11,7 @@ start:
     xor ax, ax                          
     mov es, ax
     mov ds, ax
-    mov bp, 0x8000
+    mov bp, 0x9000
     mov sp, bp
 
     mov bx, KERNEL_LOCATION
