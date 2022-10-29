@@ -1,9 +1,8 @@
 #include "includes/stdio.h"
 #include "includes/io.h"
-#include "includes/colors.h"
+#include "utils/colors.h"
 
 #define VGA_MEMORY (uint8_t*)0xB8000
-#define VGA_MEMORY_COLOR (uint8_t*)0xB8001
 #define VGA_WIDTH 80
 
 uint16_t CursorPosition = 0;
@@ -31,7 +30,7 @@ void print(const char* str) {
         switch (*charPtr)
         {
         case 10:
-            index += VGA_WIDTH - index % VGA_WIDTH + 1;
+            index += VGA_WIDTH - index % VGA_WIDTH;
             break;        
         default:
         
