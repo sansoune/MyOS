@@ -23,7 +23,9 @@ void IRQ_INIT() {
     PIC_configure(PIC_REMAP_OFFSET, PIC_REMAP_OFFSET + 8);
 
     for (int i = 0; i < 16; i++) {
-        IRQ_RegisterHandler(PIC_REMAP_OFFSET + i, IRQ_Handler);
+        isr_registerhandler(PIC_REMAP_OFFSET + i, IRQ_Handler);
+        
+        
     }
 
     
