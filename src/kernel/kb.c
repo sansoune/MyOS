@@ -1,4 +1,6 @@
 
+
+
 #include "includes/kb.h"
 #include "utils/conversion.h"
 
@@ -49,6 +51,9 @@ void print_letter(uint8_t scancode) {
         break;
     case 0x0E:
         //backspace
+	setCursorPosition(GetCursorPos() - 1);
+	print(" ");
+	setCursorPosition(GetCursorPos() - 1);
         break;
     case 0x0F:
         print("    ");
