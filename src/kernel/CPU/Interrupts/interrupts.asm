@@ -20,6 +20,7 @@ extern isr_handler
 
 global isr%1:
 isr%1:
+    cli
     push 0              ; push dummy error code
     push %1             ; push interrupt number
     jmp isr_common
@@ -29,7 +30,7 @@ isr%1:
 %macro ISR_ERRORCODE 1
 global isr%1:
 isr%1:
-                        ; cpu pushes an error code to the stack
+    cli                    ; cpu pushes an error code to the stack
     push %1             ; push interrupt number
     jmp isr_common
 

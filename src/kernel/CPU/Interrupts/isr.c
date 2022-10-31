@@ -46,10 +46,9 @@ void isr_handler(Registers* regs) {
     }
     else {
         print(exception_messages[regs->interrupt]);
+	__asm__("cli");
+        __asm__("hlt");
     }
-
-    __asm__("cli");
-    __asm__("hlt");
 
 }
 
@@ -315,6 +314,7 @@ void isr_install() {
     for (int i = 0; i < 256; i++) {
         IDT_EnableGate(i);
     }
+    IDT_DisableGate(0x80);
 }
 
 void isr_registerhandler(int interrupt, ISRHandler handler) {

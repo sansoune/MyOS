@@ -95,12 +95,12 @@ uint16_t PIC_ReadIRQRequestRegister() {
     outb(PIC1_COMMAND_PORT, PIC_CMD_READ_IRR);
     outb(PIC2_COMMAND_PORT, PIC_CMD_READ_IRR);
 
-    return inb(PIC1_COMMAND_PORT) | (inb(PIC2_COMMAND_PORT) << 8); 
+    return ((uint16_t)inb(PIC1_COMMAND_PORT)) | (((uint16_t)inb(PIC2_COMMAND_PORT)) << 8); 
 }
 
 uint16_t PIC_ReadInServiceRegister() {
     outb(PIC1_COMMAND_PORT, PIC_CMD_READ_ISR);
     outb(PIC2_COMMAND_PORT, PIC_CMD_READ_ISR);
 
-    return inb(PIC1_COMMAND_PORT) | (inb(PIC2_COMMAND_PORT) << 8); 
+    return ((uint16_t)inb(PIC1_COMMAND_PORT)) | (((uint16_t)inb(PIC2_COMMAND_PORT)) << 8); 
 }
