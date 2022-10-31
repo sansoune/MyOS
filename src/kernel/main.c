@@ -17,7 +17,7 @@ void start(void) {
     print("hello from c!\ntest 1234");
     setCursorPosition(PostionFromCoords(20,9));
     print("test hehehe hahaha");
-    IRQ_RegisterHandler(0, timer);
+    //IRQ_RegisterHandler(0, timer);
     init_kb();
     // isr_registerhandler(33, keyboard_callback);
     // isr_registerhandler(32, timer);
