@@ -14,11 +14,14 @@ void start(void) {
     IDT_INIT();
     isr_install();
     IRQ_INIT();
-    print("hello from c!\ntest 1234");
-    setCursorPosition(PostionFromCoords(20,9));
-    print("test hehehe hahaha");
+    //print("hello from c!\ntest 1234");
+    //setCursorPosition(PostionFromCoords(20,9));
+    //print("test hehehe hahaha");
     //IRQ_RegisterHandler(0, timer);
+    print("Welcome to San OS\n");
+    print("SANOS>");
     init_kb();
+    IRQ_RegisterHandler(0, timer);
     // isr_registerhandler(33, keyboard_callback);
     // isr_registerhandler(32, timer);
     

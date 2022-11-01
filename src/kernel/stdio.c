@@ -33,25 +33,30 @@ uint16_t GetCursorPos()
 	return pos;
 }
 
-void print(const char* str) {
-    uint8_t* charPtr = (uint8_t*)str;
+void putc(char c){
     uint16_t index = CursorPosition;
-    while (*charPtr != 0)
-    {
-        switch (*charPtr)
+    switch (c)
         {
         case 10:
             index += VGA_WIDTH - index % VGA_WIDTH;
             break;
         default:
 
-        *(VGA_MEMORY + index * 2) = *charPtr;
+        *(VGA_MEMORY + index * 2) = c;
         // *(VGA_MEMORY_COLOR + index * 2) = BACKGROUND_BLINKINGRED | FOREGROUND_CYAN;   just to test the colors
         index++;
+   }
+   setCursorPosition(index);
+}
 
-        }
+
+void print(const char* str) {
+    uint8_t* charPtr = (uint8_t*)str;
+    while (*charPtr != 0)
+    {
+        putc(*charPtr);
         charPtr++;
     }
-    setCursorPosition(index);
+
 
 }
