@@ -1,9 +1,11 @@
 #include "includes/kb.h"
 #include "utils/conversion.h"
+#include "utils/types.h"
 #include "utils/string.h"
 
 
 static char buffer[256];
+int status;
 uint16_t curretPos;
 
 const char scancode_to_char[] = {
@@ -11,8 +13,16 @@ const char scancode_to_char[] = {
     0, 0, 'a', 'z', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '^', '$',
     0, 0, 'q', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', '%', '*',
     0, '<', 'w', 'x', 'c', 'v', 'b', 'n', ',', ';' ,':', '!',
- };
+};
 
+
+char* readStr() {
+     return buffer;
+}
+
+void clean_buffer() {
+     buffer[0] = '\0';
+}
 
 void print_letter(uint8_t scancode) {
     switch (scancode)
@@ -44,8 +54,10 @@ void print_letter(uint8_t scancode) {
     case 0x1C:
         print("\n");
 	append(buffer, '\n');
-	print(buffer);
-	buffer[0] = '\0';
+	//print(buffer);
+	//buffer[0] = '\0';
+	status = false;
+	//disable_kb();
         return;
     case 0x2A:
 	print("left shift");
@@ -62,6 +74,7 @@ void print_letter(uint8_t scancode) {
 	append(buffer, letter);
         break;
     }
+    return;
 }
 
 void keyboard_callback(Registers* regs) {
@@ -70,9 +83,11 @@ void keyboard_callback(Registers* regs) {
     print_letter(scancode);
 }
 
+void curretnPos() {
+    curretPos = GetCursorPos();
+}
 
 void init_kb(){
-    curretPos = GetCursorPos();
     outb(0x21,0xfd);
     outb(0xa1,0xff);
     IRQ_RegisterHandler(1, keyboard_callback);
