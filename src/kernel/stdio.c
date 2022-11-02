@@ -1,9 +1,11 @@
 #include "includes/stdio.h"
 #include "includes/io.h"
 #include "utils/colors.h"
+#include "utils/memory.h"
 
 #define VGA_MEMORY (uint8_t*)0xB8000
 #define VGA_WIDTH 80
+#define VGA_HEIGHT 25
 
 uint16_t CursorPosition = 0;
 
@@ -33,6 +35,20 @@ uint16_t GetCursorPos()
 	return pos;
 }
 
+void clr_tty_line(int line){
+	uint16_t index = PostionFromCoords(0, line);
+	for(int i = 0; i < VGA_WIDTH; i++){
+		*(VGA_MEMORY + index * 2) = 0;
+		index++;
+	}
+
+}
+
+int scroll_ln() {
+     memcp((2 * PostionFromCoords(0, 1) + VGA_MEMORY), (2 * PostionFromCoords(0, 0) + VGA_MEMORY), VGA_WIDTH * (VGA_HEIGHT - 1) * 2);
+     clr_tty_line(24);
+}
+
 void putc(char c){
     uint16_t index = CursorPosition;
     switch (c)
@@ -45,6 +61,10 @@ void putc(char c){
         *(VGA_MEMORY + index * 2) = c;
         // *(VGA_MEMORY_COLOR + index * 2) = BACKGROUND_BLINKINGRED | FOREGROUND_CYAN;   just to test the colors
         index++;
+   }
+   if(index >=  PostionFromCoords(VGA_WIDTH-1, VGA_HEIGHT-1)) {
+	scroll_ln();
+	index = index - 1 * VGA_WIDTH;
    }
    setCursorPosition(index);
 }
