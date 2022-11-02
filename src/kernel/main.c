@@ -7,6 +7,7 @@
 #include "CPU/Interrupts/gdt.h"
 #include "includes/kb.h"
 #include "utils/types.h"
+#include "shell/shell.h"
 
 void timer(Registers* regs) {
     print(".");
@@ -33,7 +34,7 @@ void start(void) {
 	//buffer[0] = '\0';
     		buffer = readStr();
     	}
-    	print(buffer);
+    	shell(buffer);
 	clean_buffer();
     }
     //IRQ_RegisterHandler(0, timer);

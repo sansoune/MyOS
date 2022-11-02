@@ -44,6 +44,13 @@ void clr_tty_line(int line){
 
 }
 
+void clear() {
+    for(int i = 0; i <= VGA_HEIGHT-1; i++){
+	clr_tty_line(i);
+    }
+    setCursorPosition(0);
+}
+
 int scroll_ln() {
      memcp((2 * PostionFromCoords(0, 1) + VGA_MEMORY), (2 * PostionFromCoords(0, 0) + VGA_MEMORY), VGA_WIDTH * (VGA_HEIGHT - 1) * 2);
      clr_tty_line(24);
