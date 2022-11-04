@@ -88,8 +88,8 @@ void curretnPos() {
 }
 
 void init_kb(){
-    outb(0x21,0xfd);
-    outb(0xa1,0xff);
+//    outb(0x21,0xfd);
+//    outb(0xa1,0xff);
     IRQ_RegisterHandler(1, keyboard_callback);
     return;
 }
