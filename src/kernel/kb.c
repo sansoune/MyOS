@@ -32,9 +32,9 @@ void print_letter(uint8_t scancode) {
         break;
     case 0x0E:
         //backspace
-	uint16_t pos = GetCursorPos();
-	if(pos > curretPos){
-		setCursorPosition(pos - 1);
+	    uint16_t pos = GetCursorPos();
+	    if(pos > curretPos){
+		    setCursorPosition(pos - 1);
         	print(" ");
        		setCursorPosition(pos - 1);
         	int len = strlen(buffer);
@@ -42,36 +42,36 @@ void print_letter(uint8_t scancode) {
           		buffer[len - 1] = '\0';
         	}
 
-	}
+	    }
         break;
     case 0x0F:
         print("    ");
-	append(buffer, ' ');
-	append(buffer, ' ');
-	append(buffer, ' ');
-	append(buffer, ' ');
+	    append(buffer, ' ');
+	    append(buffer, ' ');
+	    append(buffer, ' ');
+	    append(buffer, ' ');
         break;
     case 0x1C:
         print("\n");
-	append(buffer, '\n');
+	    append(buffer, '\n');
 	//print(buffer);
 	//buffer[0] = '\0';
-	status = false;
+	    status = false;
 	//disable_kb();
         return;
     case 0x2A:
-	print("left shift");
-	break;
+	    print("left shift");
+	    break;
     case 0x39:
         print(" ");
-	append(buffer, ' ');
+	    append(buffer, ' ');
         break;
     default:
         //print(hex_to_String(scancode));
-	//print(kbdus[scancode]);
-	char letter = scancode_to_char[(int)scancode];
-	putc(letter);
-	append(buffer, letter);
+	    //print(kbdus[scancode]);
+	    char letter = scancode_to_char[(int)scancode];
+	    putc(letter);
+	    append(buffer, letter);
         break;
     }
     return;

@@ -8,13 +8,13 @@ void shell(char* input) {
 	}else if(strcmp(input, "clr\n") == 0){
 		clear();
 	}else if(strcmp(input, "timer\n") == 0){
-                int seconds = second();
+        int seconds = second();
 		print(toString(seconds));
 		print("\n");
-        }else if(strcmp(input, "sleep\n") == 0){
-                sleep(100);
+    }else if(strcmp(input, "sleep\n") == 0){
+        sleep(100);
 		print("just wake up\n");
-        }
+    }
 	else {
 		print("Unknown command: ");
 		print(input);

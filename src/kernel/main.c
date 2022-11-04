@@ -18,14 +18,14 @@ void start(void) {
     init_kb();
     print("Welcome to San OS\n");
     while(true){
-	status = true;
+	    status = true;
     	print("SANOS>");
-	curretnPos();
-   	while(status == true){
+	    curretnPos();
+   	    while(status == true){
     	    buffer = readStr();
     	}
     	shell(buffer);
-	clean_buffer();
+	    clean_buffer();
     }
     return;
 }

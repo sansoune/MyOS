@@ -10,16 +10,18 @@ int second() {
 }
 
 void timer_handler(Registers* regs) {
-      timer_ticks++;
-      if(timer_ticks % 18 == 0){
-	seconds++;
-      }
+    timer_ticks++;
+    if(timer_ticks % 18 == 0){
+	    seconds++;
+    }
     return;
 }
 
 void sleep(int ticks) {
     int startTicks = timer_ticks;
-    while(timer_ticks < startTicks + ticks){}
+    while(timer_ticks < startTicks + ticks){
+        __asm__("hlt");
+    }
     return;
 }
 

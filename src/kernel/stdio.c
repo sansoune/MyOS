@@ -46,7 +46,7 @@ void clr_tty_line(int line){
 
 void clear() {
     for(int i = 0; i <= VGA_HEIGHT-1; i++){
-	clr_tty_line(i);
+	    clr_tty_line(i);
     }
     setCursorPosition(0);
 }
