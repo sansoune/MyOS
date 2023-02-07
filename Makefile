@@ -2,35 +2,53 @@ ASM=nasm
 # GCC=x86_64-elf-gcc
 GCC=i386-elf-gcc
 
+SRCDIR = src
+BUILD_DIR = dist
+
+# Source files
+# SOURCES = $(wildcard $(SRCDIR)/*.c)
+SOURCES := $(shell find src/kernel -name '*.c')
+ASMSOURCES = $(shell find src/kernel -name '*.asm')
+ASMDIRS = $(sort $(dir $(ASMSOURCES)))
+DIRS = $(sort $(dir $(SOURCES)))
+
+OBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(patsubst %.c, %.o, $(SOURCES))))
+ASMOBJECTS = $(addprefix $(BUILD_DIR)/, $(notdir $(patsubst %.asm, %_asm.o, $(ASMSOURCES))))
+
+vpath %.asm $(ASMDIRS)
+vpath %.c $(DIRS)
 
 
-all: img
+#Flags
+CFLAGS = -std=c99 -g -ffreestanding -nostdlib
+ASFLAGS = -f elf32
+LDFLAGS = -T $(SRCDIR)/kernel/linker.ld -nostdlib
 
-build: clean
-	$(ASM) ./src/bootloader/boot.asm -f bin -o ./build/boot.bin
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/main.c -o ./build/main.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/stdio.c -o ./build/stdio.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/io.c -o ./build/io.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/pic.c -o ./build/pic.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/kb.c -o ./build/kb.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/utils/conversion.c -o ./build/conversion.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/utils/string.c -o ./build/string.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/utils/memory.c -o ./build/memory.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/shell/shell.c -o ./build/shell.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/CPU/Interrupts/idt.c -o ./build/idt.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/CPU/Interrupts/isr.c -o ./build/isr.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/CPU/Interrupts/irq.c -o ./build/irq.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/CPU/Interrupts/gdt.c -o ./build/gdt.o -m32
-	$(GCC) -std=c99 -g -ffreestanding -nostdlib -c ./src/kernel/CPU/timer/timer.c -o ./build/timer.o -m32
-	$(ASM) ./src/kernel/kernel.asm -f elf32 -o ./build/kernel.o
-	$(ASM) ./src/kernel/CPU/Interrupts/interrupts.asm -f elf32 -o ./build/interrupts.o
-	$(ASM) ./src/kernel/CPU/Interrupts/gdt.asm -f elf32 -o ./build/gdt_asm.o
-	i386-elf-ld -o ./build/kernel.bin -T ./src/kernel/linker.ld -nostdlib ./build/kernel.o ./build/main.o ./build/stdio.o ./build/io.o ./build/pic.o ./build/conversion.o ./build/memory.o ./build/shell.o ./build/string.o ./build/timer.o ./build/kb.o ./build/idt.o ./build/isr.o ./build/irq.o ./build/interrupts.o ./build/gdt_asm.o ./build/gdt.o
-	cat ./build/boot.bin ./build/kernel.bin >> "./build/OS.bin"
+.PHONY: all clean
 
-img: build
-	dd if=/dev/zero of=./build/main.img bs=512 count=2880
-	dd if=./build/OS.bin of=./build/main.img conv=notrunc
+all: $(BUILD_DIR)/kernel.bin
+        $(ASM) ./src/bootloader/boot.asm -f bin -o ./dist/boot.bin
+        cat ./dist/boot.bin ./dist/kernel.bin >> "./dist/OS.bin"
+        dd if=/dev/zero of=./dist/main.img bs=512 count=2880
+        dd if=./dist/OS.bin of=./dist/main.img conv=notrunc
+
+
+
+info: $(ASMOBJECTS)
+        # @echo "sources $(SOURCES)"
+        @echo "sources $(ASMOBJECTS)"
+
+$(BUILD_DIR)/kernel.bin: $(OBJECTS) $(ASMOBJECTS)
+        i386-elf-ld -o $@ $(LDFLAGS) $(OBJECTS) $(ASMOBJECTS)
+
+
+$(OBJECTS): $(BUILD_DIR)/%.o : %.c
+        $(GCC) $(CFLAGS) -c $< -o $@ -m32
+
+# $(ASMOBJECTS): $(BUILD_DIR)/%_asm.o : $(ASMSOURCES)
+
+$(ASMOBJECTS): $(BUILD_DIR)/%_asm.o : %.asm
+        $(ASM) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf ./build/*
+        rm -rf $(BUILD_DIR)/*
