@@ -1,6 +1,7 @@
 [org 0x7c00]
 [bits 16]
 KERNEL_LOCATION equ 0x1000
+MEMORY_REGION_COUNT_LOCATION equ 0x700
 
 section .text
 global start
@@ -29,14 +30,20 @@ start:
     mov al, 0x3
     int 0x10
 
+    call DetectMemory
     cli
     lgdt [GDT_Descriptor]
     mov eax, cr0
     or eax, 1
     mov cr0, eax
 
+    mov eax, [MemoryRegionCount]
+    mov [MEMORY_REGION_COUNT_LOCATION], eax
+
     jmp CODE_SEG:start_protected_mode
     jmp $
+
+%include "./src/bootloader/memory.asm"
 
 [bits 32]
 start_protected_mode:

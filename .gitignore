@@ -1,4 +1,5 @@
-/build
+/dist
+/gnu-efi
 /toolchain
 /src_2
 /test

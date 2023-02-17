@@ -13,6 +13,16 @@ entry:
     mov al, 0
     rep stosb
 
+    ; push ebp
+    ; mov ebp, esp
+
+    ; mov eax, [ebp + 4]
+    mov eax, [MEMORY_REGION_COUNT_LOCATION]
+    push eax
+
+
     cli
     call start
     jmp $ 
+
+MEMORY_REGION_COUNT_LOCATION equ 0x700

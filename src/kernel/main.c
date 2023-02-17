@@ -3,12 +3,16 @@
 #include "CPU/Interrupts/isr.h"
 #include "CPU/Interrupts/irq.h"
 #include "CPU/Interrupts/gdt.h"
+#include "utils/conversion.h"
 #include "CPU/timer/timer.h"
 #include "includes/kb.h"
 #include "utils/types.h"
 #include "shell/shell.h"
+#include "utils/memory.h"
 
-void start(void) {
+// extern uint8_t MemoryRegionCount;
+
+void start(uint8_t MemoryRegionCount) {
     GDT_Init();
     IDT_INIT();
     isr_install();
@@ -16,6 +20,7 @@ void start(void) {
     char* buffer;
     init_timer();
     init_kb();
+    print(toString(MemoryRegionCount));
     print("Welcome to San OS\n");
     while(true){
 	    status = true;
